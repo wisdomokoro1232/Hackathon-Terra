@@ -8,7 +8,7 @@ import 'sample_item_details_view.dart';
 class SampleItemListView extends StatelessWidget {
   const SampleItemListView({
     super.key,
-    this.items = const [SampleItem(1), SampleItem(2), SampleItem(3)],
+    this.items = const [SampleItem(1), SampleItem(10), SampleItem(5)],
   });
 
   static const routeName = '/';
