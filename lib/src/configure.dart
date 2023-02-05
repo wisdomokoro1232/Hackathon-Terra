@@ -40,7 +40,7 @@ class _configureState extends State<Configure> {
                     const Spacer(flex: 8),
                     const Text(
                         "Are you planning to take drugs?",
-                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 36, color: Colors.white)
+                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: Colors.white)
                     ),
                     Switch(
                         value: takingDrugs,
@@ -52,7 +52,7 @@ class _configureState extends State<Configure> {
                     const Spacer(flex: 1),
                     const Text(
                         "Are you planning to drink?",
-                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 36, color: Colors.white)
+                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: Colors.white)
                     ),
                     Switch(
                         value: drinkingAlcohol,
@@ -64,7 +64,7 @@ class _configureState extends State<Configure> {
                     const Spacer(flex: 1),
                     const Text(
                         "If you'd like to notify a friend enter their number below",
-                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 36, color: Colors.white)
+                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: Colors.white)
                     ),
                     TextField(
                       controller: numberEntryController,
@@ -72,7 +72,7 @@ class _configureState extends State<Configure> {
                           hintText: 'friends number'
                       ),
                     ),
-                    const Spacer(flex: 1),
+                    const Spacer(flex: 2),
                     TextButton(
                         onPressed: () async {
                           Navigator.push(

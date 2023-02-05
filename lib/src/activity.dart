@@ -72,9 +72,9 @@ class _activityState extends State<Activity> {
     });
   }
 
-  void addTimeQueryData() {
+  void addTimeQueryData() async {
     if (duration.inSeconds.remainder(5) == 0) {
-      WearableInfo info = DataQuerier.getInfo(widget.drinkingAlcohol, widget.takingDrugs);
+      WearableInfo info = await DataQuerier.getInfo(widget.drinkingAlcohol, widget.takingDrugs);
       heartRate = info.heartRate;
       bloodPressure = info.bloodPressure;
       bodyTemp = info.bodyTemp;

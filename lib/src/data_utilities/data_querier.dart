@@ -1,9 +1,22 @@
-class DataQuerier {
-  String baseUrl = "https://night-guard-backend.herokuapp.com/";
+import 'package:http/http.dart' as http;
 
-  static WearableInfo getInfo(bool drinkingAlcohol, bool takingDrugs) {
-    
-    return WearableInfo(12, 10.0, 10.0, false);
+class DataQuerier {
+
+  static Future<WearableInfo> getInfo(bool drinkingAlcohol, bool takingDrugs) {
+    String url = "https://night-guard-backend.herokuapp.com/get_data";
+    return http.get(Uri.parse(url)).then(
+        (response) {
+          String response_body = response.body;
+          print(response_body);
+          List<String> values = response_body.split(',');
+          return WearableInfo(
+              int.parse(values[0]),
+              double.parse(values[1]),
+              double.parse(values[2]),
+              int.parse(values[3]) > 0.5
+          );
+        }
+    );
   }
 }
 
