@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'activity.dart';
+
 class Configure extends StatefulWidget {
   const Configure({super.key});
 
@@ -61,7 +63,7 @@ class _configureState extends State<Configure> {
                         onPressed: () {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const Configure())
+                              MaterialPageRoute(builder: (context) => Activity())
                           );
                         },
                         child: const Text(
