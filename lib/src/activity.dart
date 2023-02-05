@@ -4,32 +4,120 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
+import 'package:night_watch/src/data_utilities/data_querier.dart';
 import 'package:twilio_flutter/twilio_flutter.dart';
+import 'package:vibration/vibration.dart';
 
-class Activity extends StatefulWidget {  @override
+class Activity extends StatefulWidget {
+  final String number;
+  final bool takingDrugs;
+  final bool drinkingAlcohol;
+  const Activity(
+      this.number,
+      this.takingDrugs,
+      this.drinkingAlcohol,
+      {super.key}
+  );
+  @override
   State<StatefulWidget> createState() => _activityState();
 }
 
 class _activityState extends State<Activity> {
+
+
   Duration duration = Duration();
+  int heartRate = 10;
+  double bloodPressure = 12.0;
+  double bodyTemp = 12.0;
+  bool activeSpike = false;
   Timer? timer;
+
 
   @override
   void initState() {
     super.initState();
-
     startTimer();
   }
 
   void startTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (_) => addTime());
+    timer = Timer.periodic(Duration(seconds: 1), (_) => addTimeQueryData());
   }
 
-  void addTime() {
+  void spikeResponse() {
+    activeSpike = true;
+    Future.delayed(const Duration(milliseconds: 10000), () async {
+      // Here you can write your code
+      String message = "This is an automated message from SpikeGuard, I am in danger and may have been spiked or become ill from drugs";
+      List<String> recipients = [widget.number];
+
+      if (activeSpike == true) {
+        String _result = await sendSMS(
+            message: message, recipients: recipients, sendDirect: true)
+            .catchError((onError) {
+          print(onError);
+        });
+        print(_result);
+      }
+
+      setState(() {
+        // Here you can write your code for open new view
+      });
+
+    });
+    _showMyDialog();
+    Vibration.hasCustomVibrationsSupport().then((hasSupport) => {
+      if (hasSupport != null && hasSupport) {
+        Vibration.vibrate(duration: 1000)
+      }
+    });
+  }
+
+  void addTimeQueryData() {
+    if (duration.inSeconds.remainder(5) == 0) {
+      WearableInfo info = DataQuerier.getInfo(widget.drinkingAlcohol, widget.takingDrugs);
+      heartRate = info.heartRate;
+      bloodPressure = info.bloodPressure;
+      bodyTemp = info.bodyTemp;
+      if (info.spiked) {
+        spikeResponse();
+      }
+    }
     setState(() {
       final seconds = duration.inSeconds + 1;
       duration = Duration(seconds: seconds);
     });
+
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('AlertDialog Title'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Your vitals have indicated you may be in trouble.'),
+                Text('Only dismiss this message if you are ok.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Im OK'),
+              onPressed: () {
+                setState(() {
+                  activeSpike = false;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget buildTime() {
@@ -76,23 +164,8 @@ class _activityState extends State<Activity> {
           TextButton(
             child: Text("end night"),
             onPressed: () async {
-              String message = "This is a test message!";
-              List<String> recipents = ["07421326488"];
-
-              String _result = await sendSMS(message: message, recipients: recipents, sendDirect: true)
-                  .catchError((onError) {
-                print(onError);
-              });
-              print(_result);
-
-              // var twilioFlutter = TwilioFlutter(
-              //     accountSid : 'AC55814b3b9c08c4a0f0b78d761a986a4c', // replace *** with Account SID
-              //     authToken : 'd5e32dff0b5c539e688588b7171eb8fe',  // replace xxx with Auth Token
-              //     twilioNumber : '+15744061010'  // replace .... with Twilio Number
-              // );
-              // twilioFlutter.sendSMS(
-              //     toNumber : '+447421326488',
-              //     messageBody : 'hello, this is a message from NightGuard');
+              spikeResponse();
+              // Navigator.of(context).pop();
             },
           ),
           Spacer(flex: 1,),
@@ -195,11 +268,11 @@ class _activityState extends State<Activity> {
   buildVitals() {
     return Column(
       children: [
-        buildHeartRate(10),
+        buildHeartRate(heartRate),
         SizedBox(height: 10,),
-        buildBodyTemp(12.0),
+        buildBodyTemp(bodyTemp),
         SizedBox(height: 10,),
-        buildPressure(12.0)
+        buildPressure(bloodPressure)
       ],
     );
   }

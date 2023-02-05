@@ -16,7 +16,16 @@ class Configure extends StatefulWidget {
 
 class _configureState extends State<Configure> {
   bool takingDrugs = false;
-  bool notifyFriends = true;
+  bool drinkingAlcohol = false;
+
+  final numberEntryController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    numberEntryController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,19 +51,23 @@ class _configureState extends State<Configure> {
                         }),
                     const Spacer(flex: 1),
                     const Text(
-                        "Would you like to notify a friend?",
+                        "Are you planning to drink?",
                         style: TextStyle(fontWeight: FontWeight.normal, fontSize: 36, color: Colors.white)
                     ),
                     Switch(
-                        value: notifyFriends,
+                        value: drinkingAlcohol,
                         onChanged: (bool value) {
                           setState(() {
-                            notifyFriends = value;
+                            drinkingAlcohol = value;
                           });
-                        }
-                    ),
+                        }),
                     const Spacer(flex: 1),
+                    const Text(
+                        "If you'd like to notify a friend enter their number below",
+                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 36, color: Colors.white)
+                    ),
                     TextField(
+                      controller: numberEntryController,
                       decoration: InputDecoration(
                           hintText: 'friends number'
                       ),
@@ -64,7 +77,7 @@ class _configureState extends State<Configure> {
                         onPressed: () async {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => Activity())
+                              MaterialPageRoute(builder: (context) => Activity(numberEntryController.value.text, takingDrugs, drinkingAlcohol))
                           );
                         },
                         child: const Text(
@@ -72,9 +85,10 @@ class _configureState extends State<Configure> {
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                         )
                     ),
-                    TextButton(onPressed: () async {
-                      var result = await Permission.sms.request();
-                    }, child: Text("press me")),
+                    // TextButton(
+                    //     onPressed: () async {
+                    //   var result = await Permission.sms.request();
+                    // }, child: Text("press me")),
                     const Spacer(flex: 8)
                   ]),
             )
