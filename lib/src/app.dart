@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:night_watch/src/introduction.dart';
 
 import 'sample_feature/sample_item_details_view.dart';
 import 'sample_feature/sample_item_list_view.dart';
@@ -25,6 +26,15 @@ class MyApp extends StatelessWidget {
     return AnimatedBuilder(
       animation: settingsController,
       builder: (BuildContext context, Widget? child) {
+        return MaterialApp(
+          title: "NightGuard",
+          theme: ThemeData(primarySwatch: Colors.green),
+          darkTheme: ThemeData(primarySwatch: Colors.grey),
+          color: Colors.amberAccent,
+          supportedLocales: {const Locale('en', ' ')},
+          debugShowCheckedModeBanner: false,
+          home: Introduction()
+        );
         return MaterialApp(
           // Providing a restorationScopeId allows the Navigator built by the
           // MaterialApp to restore the navigation stack when a user leaves and

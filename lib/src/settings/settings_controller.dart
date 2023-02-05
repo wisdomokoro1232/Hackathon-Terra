@@ -13,6 +13,12 @@ class SettingsController with ChangeNotifier {
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
 
+  // User preferences that are set at the beginning
+  bool takingDrugs = false;
+  bool notifyFriends = false;
+  String name = "";
+  List<int> friendsToNotify = [];
+
   // Make ThemeMode a private variable so it is not updated directly without
   // also persisting the changes with the SettingsService.
   late ThemeMode _themeMode;
@@ -28,6 +34,10 @@ class SettingsController with ChangeNotifier {
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
+  }
+
+  Future<void> updatePreferences() async {
+
   }
 
   /// Update and persist the ThemeMode based on the user's selection.
