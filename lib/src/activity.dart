@@ -164,8 +164,8 @@ class _activityState extends State<Activity> {
           TextButton(
             child: Text("end night"),
             onPressed: () async {
-              spikeResponse();
-              // Navigator.of(context).pop();
+              timer?.cancel();
+              Navigator.of(context).pop();
             },
           ),
           Spacer(flex: 1,),

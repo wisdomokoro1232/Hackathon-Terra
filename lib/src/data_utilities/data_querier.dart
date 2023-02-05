@@ -10,9 +10,9 @@ class DataQuerier {
           print(response_body);
           List<String> values = response_body.split(',');
           return WearableInfo(
-              int.parse(values[0]),
+              double.parse(values[2]).toInt(),
+              double.parse(values[0]),
               double.parse(values[1]),
-              double.parse(values[2]),
               int.parse(values[3]) > 0.5
           );
         }
