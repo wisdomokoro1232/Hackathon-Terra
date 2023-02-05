@@ -14,6 +14,9 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  flutter_sms: ^2.3.3
+  permission_handler: ^10.2.0
+  twilio_flutter: ^0.0.9
 
 dev_dependencies:
   flutter_test:

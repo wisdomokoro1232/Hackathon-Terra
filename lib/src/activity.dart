@@ -3,6 +3,8 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sms/flutter_sms.dart';
+import 'package:twilio_flutter/twilio_flutter.dart';
 
 class Activity extends StatefulWidget {  @override
   State<StatefulWidget> createState() => _activityState();
@@ -73,7 +75,25 @@ class _activityState extends State<Activity> {
           Spacer(flex: 2,),
           TextButton(
             child: Text("end night"),
-            onPressed: () {},
+            onPressed: () async {
+              String message = "This is a test message!";
+              List<String> recipents = ["07421326488"];
+
+              String _result = await sendSMS(message: message, recipients: recipents, sendDirect: true)
+                  .catchError((onError) {
+                print(onError);
+              });
+              print(_result);
+
+              // var twilioFlutter = TwilioFlutter(
+              //     accountSid : 'AC55814b3b9c08c4a0f0b78d761a986a4c', // replace *** with Account SID
+              //     authToken : 'd5e32dff0b5c539e688588b7171eb8fe',  // replace xxx with Auth Token
+              //     twilioNumber : '+15744061010'  // replace .... with Twilio Number
+              // );
+              // twilioFlutter.sendSMS(
+              //     toNumber : '+447421326488',
+              //     messageBody : 'hello, this is a message from NightGuard');
+            },
           ),
           Spacer(flex: 1,),
         ],

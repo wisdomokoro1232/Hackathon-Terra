@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'activity.dart';
 
@@ -60,7 +61,7 @@ class _configureState extends State<Configure> {
                     ),
                     const Spacer(flex: 1),
                     TextButton(
-                        onPressed: () {
+                        onPressed: () async {
                           Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => Activity())
@@ -71,6 +72,9 @@ class _configureState extends State<Configure> {
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                         )
                     ),
+                    TextButton(onPressed: () async {
+                      var result = await Permission.sms.request();
+                    }, child: Text("press me")),
                     const Spacer(flex: 8)
                   ]),
             )
